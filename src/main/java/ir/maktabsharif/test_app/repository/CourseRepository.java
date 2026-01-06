@@ -2,11 +2,12 @@ package ir.maktabsharif.test_app.repository;
 
 import ir.maktabsharif.test_app.model.Course;
 import ir.maktabsharif.test_app.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface CourseRepository extends BaseRepository<Long, Course> {
+public interface CourseRepository extends JpaRepository<Course, Long> {
     Optional<Course> findByCourseCode(String courseCode);
     List<Course> findByTeacher(User teacher);
 }
