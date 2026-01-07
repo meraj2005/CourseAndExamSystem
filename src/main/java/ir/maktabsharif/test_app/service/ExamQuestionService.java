@@ -10,11 +10,8 @@ import jakarta.validation.constraints.Email;
 import java.util.List;
 
 public interface ExamQuestionService extends BaseService<ExamQuestion,Long>{
-    QuestionResponse addQuestionToExam(Long examId, QuestionCreateRequest request);
-    void addExistingQuestionToExam(Long examId, Long questionId);
     QuestionResponse updateQuestion(Long questionId, QuestionCreateRequest request);
     void removeQuestionFromExam(Long examId, Long questionId);
-    void setDefaultScore(Long examId, Long questionId, Double score);
     List<QuestionResponse> getExamQuestions(Long examId);
     Double calculateTotalScore(Long examId);
     void addFromBank(Long examId, AddQuestionToExamRequest request);

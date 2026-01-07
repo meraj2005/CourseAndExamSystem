@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public interface ExamQuestionRepository extends JpaRepository<ExamQuestion, Long> {
     Optional<ExamQuestion>findByExamIdAndQuestionId(Long examId, Long questionId);
+    void deleteExamQuestionByExamIdAndQuestionId(Long examId, Long questionId);
     List<ExamQuestion> findByExamId(Long examId);
     boolean existsByExamIdAndQuestionId(Long examId, Long questionId);
 }

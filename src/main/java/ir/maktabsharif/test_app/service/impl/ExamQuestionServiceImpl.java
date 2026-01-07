@@ -4,9 +4,13 @@ import ir.maktabsharif.test_app.dto.question.AddQuestionToExamRequest;
 import ir.maktabsharif.test_app.dto.question.QuestionCreateRequest;
 import ir.maktabsharif.test_app.dto.question.QuestionResponse;
 import ir.maktabsharif.test_app.exceptions.BusinessException;
+import ir.maktabsharif.test_app.mapper.OptionMapper;
+import ir.maktabsharif.test_app.mapper.QuestionMapper;
 import ir.maktabsharif.test_app.model.Exam;
 import ir.maktabsharif.test_app.model.ExamQuestion;
 import ir.maktabsharif.test_app.model.User;
+import ir.maktabsharif.test_app.model.questions.AnnotationQuestions;
+import ir.maktabsharif.test_app.model.questions.MultipleChoiceQuestions;
 import ir.maktabsharif.test_app.model.questions.Question;
 import ir.maktabsharif.test_app.model.questions.QuestionFactory;
 import ir.maktabsharif.test_app.repository.ExamQuestionRepository;
@@ -38,39 +42,49 @@ public class ExamQuestionServiceImpl extends BaseServiceImpl<ExamQuestion,Long>i
     }
 
 
-    @Override
-    public QuestionResponse addQuestionToExam(Long examId, QuestionCreateRequest request) {
-        return null;
-    }
-
-    @Override
-    public void addExistingQuestionToExam(Long examId, Long questionId) {
-
-    }
 
     @Override
     public QuestionResponse updateQuestion(Long questionId, QuestionCreateRequest request) {
-        return null;
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(() -> new BusinessException("Exam not found"));
+        if(question instanceof MultipleChoiceQuestions){
+            question.setText(request.getText());
+            ((MultipleChoiceQuestions) question).setOptions(request.getOptions()
+                    .stream()
+                    .map(OptionMapper::toEntity)
+                    .toList());
+            question.setTitle(request.getTitle());
+            return QuestionMapper.toQuestionResponse(question);
+        }else if (question instanceof AnnotationQuestions){
+            question.setText(request.getText());
+            question.setTitle(request.getTitle());
+            return QuestionMapper.toQuestionResponse(question);
+        }
+        throw new RuntimeException("Question type not found");
     }
 
     @Override
     public void removeQuestionFromExam(Long examId, Long questionId) {
-
+        examQuestionRepository.deleteExamQuestionByExamIdAndQuestionId(examId,questionId);
     }
 
-    @Override
-    public void setDefaultScore(Long examId, Long questionId, Double score) {
-
-    }
 
     @Override
     public List<QuestionResponse> getExamQuestions(Long examId) {
-        return List.of();
+        return examQuestionRepository.findByExamId(examId)
+                .stream()
+                .map(ExamQuestion::getQuestion)
+                .map(QuestionMapper::toQuestionResponse)
+                .distinct()
+                .toList();
     }
 
     @Override
     public Double calculateTotalScore(Long examId) {
-        return 0.0;
+        return examQuestionRepository.findByExamId(examId)
+                .stream()
+                .mapToDouble(ExamQuestion::getScore)
+                .sum();
     }
 
     @Override
@@ -99,7 +113,7 @@ public class ExamQuestionServiceImpl extends BaseServiceImpl<ExamQuestion,Long>i
     }
 
     @Override
-    public void addNewQuestion(Long examId, QuestionCreateRequest request) {
+    public void addNewQuestion(Long examId, QuestionCreateRequest request ) {
 
         Exam exam = examRepository.findById(examId)
                 .orElseThrow(() -> new BusinessException("Exam not found"));
@@ -113,7 +127,7 @@ public class ExamQuestionServiceImpl extends BaseServiceImpl<ExamQuestion,Long>i
         ExamQuestion examQuestion = ExamQuestion.builder()
                 .exam(exam)
                 .question(question)
-                .score(0.0)
+                .score(request.getScore())
                 .build();
 
         examQuestionRepository.save(examQuestion);

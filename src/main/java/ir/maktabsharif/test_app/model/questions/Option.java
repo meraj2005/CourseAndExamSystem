@@ -2,15 +2,13 @@ package ir.maktabsharif.test_app.model.questions;
 
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.MappedSuperclass;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Embeddable
 public class Option {
     private String text;

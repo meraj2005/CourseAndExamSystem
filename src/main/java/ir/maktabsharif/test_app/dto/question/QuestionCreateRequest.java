@@ -20,5 +20,8 @@ public class QuestionCreateRequest {
     @Size(max = 2000,message = "The question text should not exceed 2000 characters.")
     private String text;
 
+    @NotNull
+    private Double score;
+
     private List<OptionRequest> options;
 }
