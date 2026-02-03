@@ -16,6 +16,6 @@ public interface CourseService extends BaseService<Course, Long>{
     void assignTeacher(Long courseId, Long teacherId);
     void addStudent(Long courseId, Long studentId);
     CourseParticipantsResponse getParticipants(Long courseId);
-    //Part B
     List<CourseResponse> getMyTeachingCourses();
+    List<CourseResponse> getMyStudentCourse();
 }

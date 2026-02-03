@@ -46,11 +46,6 @@ public class AdminUserController {
         UserResponse userResponse = userService.updateUser(userId, request);
         return ResponseEntity.ok(userResponse);
     }
-    @GetMapping("/_debug")
-    public String debug() {
-        Authentication auth =
-                SecurityContextHolder.getContext().getAuthentication();
-        return auth.getAuthorities().toString();
-    }
+
 
 }

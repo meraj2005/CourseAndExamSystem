@@ -4,6 +4,7 @@ import ir.maktabsharif.test_app.dto.CourseResponse;
 import ir.maktabsharif.test_app.dto.exam.ExamCreateRequest;
 import ir.maktabsharif.test_app.dto.exam.ExamResponse;
 import ir.maktabsharif.test_app.dto.exam.ExamUpdateRequest;
+import ir.maktabsharif.test_app.dto.exam.ExamUserResponse;
 import ir.maktabsharif.test_app.exceptions.BusinessException;
 import ir.maktabsharif.test_app.mapper.ExamMapper;
 import ir.maktabsharif.test_app.model.Course;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -85,6 +88,31 @@ public class ExamServiceImpl extends BaseServiceImpl<Exam,Long> implements ExamS
         examRepository.delete(exam);
     }
 
+    @Override
+    public List<ExamResponse> getCourseExamsStudent(Long courseId) {
+        Course course = getOwnedCourse(courseId);
+
+        return examRepository.findByCourse(course)
+                .stream()
+                .map(ExamMapper::toResponse)
+                .toList();
+    }
+
+    @Override
+    public List<ExamResponse> getCourseExamsStudentNot(Long courseId) {
+        Course course = getOwnedCourse(courseId);
+        User student = securityUtil.getCurrentUser();
+        List<Exam> examAll=examRepository.findByCourse(course);
+        List<Exam> examIsEnd=examRepository.findByStudents_IdAndCourse(student.getId(),course);
+        Set<Long> examIsEndId=examIsEnd.stream()
+                .map(Exam::getId)
+                .collect(Collectors.toSet());
+        return examAll.stream()
+                .filter(exam -> !examIsEndId.contains(exam.getId()))
+                .map(ExamMapper::toResponse)
+                .toList();
+    }
+
 
     private Course getOwnedCourse(Long courseId) {
         User teacher = securityUtil.getCurrentUser();
@@ -98,4 +126,5 @@ public class ExamServiceImpl extends BaseServiceImpl<Exam,Long> implements ExamS
 
         return course;
     }
+
 }

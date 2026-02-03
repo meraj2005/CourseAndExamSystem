@@ -33,6 +33,7 @@ public class ExamQuestionServiceImpl extends BaseServiceImpl<ExamQuestion,Long>i
     private final ExamQuestionRepository examQuestionRepository;
     private final QuestionFactory questionFactory;
 
+
     public ExamQuestionServiceImpl(ExamRepository examRepository, QuestionRepository questionRepository, ExamQuestionRepository examQuestionRepository, QuestionFactory questionFactory) {
         super(examQuestionRepository);
         this.examRepository = examRepository;

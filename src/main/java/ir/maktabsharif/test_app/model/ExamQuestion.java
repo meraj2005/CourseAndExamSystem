@@ -27,6 +27,4 @@ public class ExamQuestion extends BaseModel<Long> {
 
     @Column(nullable = false)
     private Double score;
-
-
 }

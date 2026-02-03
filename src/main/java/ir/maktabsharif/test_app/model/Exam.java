@@ -2,8 +2,14 @@ package ir.maktabsharif.test_app.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import ir.maktabsharif.test_app.model.enums.EventStatus;
+import ir.maktabsharif.test_app.model.questions.Question;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Builder
 @Setter
@@ -34,5 +40,14 @@ public class Exam extends BaseModel<Long>{
 
     @Enumerated(value = EnumType.STRING)
     private EventStatus eventStatus;
+
+    @ManyToMany
+    @JoinTable(
+            name = "exam_students",
+            joinColumns = @JoinColumn(name = "exam_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id"),
+            uniqueConstraints = @UniqueConstraint(columnNames = {"exam_id", "student_id"})
+    )
+    private Set<User> students = new HashSet<>();
 
 }

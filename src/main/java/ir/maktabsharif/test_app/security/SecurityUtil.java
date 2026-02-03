@@ -18,18 +18,13 @@ public class SecurityUtil {
     }
 
     public  User getCurrentUser() {
-
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
-
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new AccessDeniedException("Unauthenticated access");
         }
-
         Object principal = authentication.getPrincipal();
-
         String username;
-
         if (principal instanceof UserDetails userDetails) {
             username = userDetails.getUsername();
         } else if (principal instanceof String) {
@@ -37,10 +32,10 @@ public class SecurityUtil {
         } else {
             throw new AccessDeniedException("Invalid authentication principal");
         }
-
         return userRepository.findByEmail(username)
                 .orElseThrow(() ->
                         new AccessDeniedException("User not found in database")
                 );
     }
+
 }

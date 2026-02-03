@@ -88,4 +88,14 @@ public class CourseServiceImpl extends BaseServiceImpl<Course, Long> implements 
                 .map(CourseMapper::toDTO)
                 .toList();
     }
+
+    @Override
+    public List<CourseResponse> getMyStudentCourse() {
+        User student = securityUtil.getCurrentUser();
+
+        return courseRepository.findByStudents_Id(student.getId())
+                .stream()
+                .map(CourseMapper::toDTO)
+                .toList();
+    }
 }

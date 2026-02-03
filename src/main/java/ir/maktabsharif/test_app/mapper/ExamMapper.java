@@ -2,6 +2,7 @@ package ir.maktabsharif.test_app.mapper;
 
 import ir.maktabsharif.test_app.dto.exam.ExamCreateRequest;
 import ir.maktabsharif.test_app.dto.exam.ExamResponse;
+import ir.maktabsharif.test_app.dto.exam.ExamUserResponse;
 import ir.maktabsharif.test_app.model.Exam;
 
 public class ExamMapper {
@@ -24,4 +25,5 @@ public class ExamMapper {
                 .durationMinutes(examCreateRequest.getDurationMinutes())
                 .build();
     }
+
 }

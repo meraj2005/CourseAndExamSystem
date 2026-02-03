@@ -4,6 +4,7 @@ import ir.maktabsharif.test_app.dto.CourseResponse;
 import ir.maktabsharif.test_app.dto.exam.ExamCreateRequest;
 import ir.maktabsharif.test_app.dto.exam.ExamResponse;
 import ir.maktabsharif.test_app.dto.exam.ExamUpdateRequest;
+import ir.maktabsharif.test_app.dto.exam.ExamUserResponse;
 import ir.maktabsharif.test_app.model.Course;
 import ir.maktabsharif.test_app.model.Exam;
 import ir.maktabsharif.test_app.model.User;
@@ -19,5 +20,6 @@ public interface ExamService extends BaseService<Exam,Long>{
     ExamResponse create(Long courseId, ExamCreateRequest request);
     ExamResponse update(Long courseId, Long examId, ExamUpdateRequest request);
     void delete(Long courseId, Long examId);
-
+    List<ExamResponse> getCourseExamsStudent(Long courseId);
+    List<ExamResponse> getCourseExamsStudentNot(Long courseId);
 }

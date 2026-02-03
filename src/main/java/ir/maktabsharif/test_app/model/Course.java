@@ -36,7 +36,8 @@ public class Course extends BaseModel<Long> {
     @JoinTable(
             name = "course_students",
             joinColumns = @JoinColumn(name = "course_id"),
-            inverseJoinColumns = @JoinColumn(name = "student_id")
+            inverseJoinColumns = @JoinColumn(name = "student_id"),
+            uniqueConstraints = @UniqueConstraint(columnNames = {"course_id", "student_id"})
     )
     private Set<User> students = new HashSet<>();
 
